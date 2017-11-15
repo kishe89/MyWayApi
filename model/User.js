@@ -5,7 +5,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    Nick: {type:String,},
+    Nick: {type:String,unique:true},
+    App:String,
+    AppId:String,
+    AccessToken:String,
     Profile: String,
     Friends:[{ type: Schema.Types.ObjectId, ref: 'user'}],
     Agree_Wait_Friends:[{ type: Schema.Types.ObjectId, ref: 'user'}],
