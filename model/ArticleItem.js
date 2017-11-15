@@ -1,0 +1,22 @@
+/**
+ * http://usejsdoc.org/
+ */
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var ArticleItemSchema = new Schema({
+    Title:String,
+    Place:String,
+    PlaceType:String,
+    Images:[{ type: Schema.Types.ObjectId, ref: 'image'}],
+    Loc : {
+        type: [Number],
+        index:'2d'
+    },
+    PostedBy:{ type: Schema.Types.ObjectId, ref: 'user'},
+    CreatedAt: { type:Date, defult: Date.now },
+    UpdatedAt: { type:Date, defult: Date.now }
+
+});
+
+module.exports = mongoose.model('article_item', ArticleItemSchema);
