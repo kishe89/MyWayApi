@@ -10,7 +10,10 @@ let users = require('./routes/users');
 
 let app = express();
 let mongoose = require('mongoose');
-
+let Log = require('./model/Log.js');
+let Logger = require('./util/logger');
+let Initializer = require('./init/Initializer');
+Initializer.InitMongoDB(process.env,mongoose);
 
 // Enable reverse proxy support in Express. This causes the
 // the "X-Forwarded-Proto" header field to be trusted so its
@@ -29,8 +32,33 @@ app.use (function (req, res, next) {
     } else {
         // request was via http, so redirect to https
         console.log('http:// Requested so redirected https://');
-        res.redirect('https://' + req.headers.host + req.url);
+        //res.redirect('https://' + req.headers.host + req.url);
+        next();
     }
+});
+
+/**
+ * reqeust log save
+ */
+app.use(function (req, res, next) {
+
+    let LogObject=Logger(req);
+    let log = new Log({
+        userAgent: LogObject.userAgent,
+        ip: LogObject.ip,
+        originalUrl: LogObject.originalUrl,
+        protocol: LogObject.protocol,
+        date: LogObject.date,
+        method: LogObject.method,
+        ApplicationId: LogObject.ApplicationId
+    });
+    log.save(function (err, result) {
+        if(err){
+            console.log(err);
+        }
+        console.log(result);
+    });
+    next();
 });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
