@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 
 var ArticleSchema = new Schema({
     Kml_Uri:String,
+    Contents:String,
     Like:{ type:Number, min: 0, default: 0},
     Like_Persons:{type: Schema.Types.ObjectId, ref: 'user'},
     Publish_range:{type: Number, default:0},
