@@ -5,7 +5,7 @@ module.exports = function(req, res, next) {
 
     const find = (user)=>{
         if(user){
-            bcrypt.compare(user.DecryptValue,AccessToken,function (err, result) {
+            bcrypt.compare(user.DecryptValue,AccessToken,function (err) {
                 if(err){
                     const error = new Error('AccessToken Invalid');
                     error.status = 401;
@@ -19,7 +19,7 @@ module.exports = function(req, res, next) {
             error.status = 404;
             throw error;
         }
-    }
+    };
     const onError = (error)=>{
         next(error,req,res,next);
     };

@@ -35,9 +35,7 @@ exports.InitMongoDB = function (env,mongoose) {
          * @TODO Production Environment Initialization
          */
         let service = JSON.parse(env.mLabmongodb);
-        console.log(service);
         let mongodb = service['mLab-mongodb'];
-        console.log(mongodb);
         let connection_string = mongodb[0].credentials.uri;
 
         /**

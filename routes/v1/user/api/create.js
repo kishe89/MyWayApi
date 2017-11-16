@@ -22,13 +22,13 @@ module.exports = function(req, res, next) {
         Task.push(new AsyncUploadObjectStorage(part,fieldMap.get('Profile'),req));
     });
     form.on('close',function () {
-        if(Task.length == 0){
+        if(Task.length === 0){
             let error = new Error('Bad Request');
             error.status = 400;
             next(error,req,res,next);
             return;
         }
-        Promise.all(Task).then(function (allData) {
+        Promise.all(Task).then(function () {
             const DecryptValue = randompass();
             const strictValue = bcrypt.hashSync(DecryptValue, bcrypt.genSaltSync(8), null);
             let user = new User({
