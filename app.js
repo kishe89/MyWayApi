@@ -7,14 +7,14 @@ let bodyParser = require('body-parser');
 let Log = require('./model/Log.js');
 let ErrorLog = require('./model/ErrorLog');
 let Logger = require('./util/logger');
-let index = require('./routes/index');
-let users = require('./routes/users');
 
+let v1 = require('./routes/v1');
 let app = express();
 let mongoose = require('mongoose');
 let Initializer = require('./init/Initializer');
+mongoose.promise = global.promise;
 Initializer.InitMongoDB(process.env,mongoose);
-
+let storageClient = Initializer.InitStorage(process.env);
 // Enable reverse proxy support in Express. This causes the
 // the "X-Forwarded-Proto" header field to be trusted so its
 // value can be used to determine the protocol. See
@@ -40,6 +40,7 @@ app.use(function (req, res, next) {
     });
     next();
 });
+
 // Add a handler to inspect the req.secure flag (see
 // http://expressjs.com/api#req.secure). This allows us
 // to know whether the request was via http or https.
@@ -62,14 +63,18 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function (req, res, next) {
+    req.storageClient = storageClient;
+    next();
+});
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/v1',v1);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -97,12 +102,23 @@ app.use(function(err, req, res, next) {
         resStatusCode:LogObject.resStatusCode,
         resLocals:LogObject.resLocals
     });
-    log.save(function (err, result) {
-        if(err) {
-            console.log(err);
+    const created = (result)=>{
+        if(!result){
+            console.error(result);
+            let error = new Error('Log Save Fail');
+            throw error;
         }
-        console.log(result);
-    });
+        else{
+            console.log(result);
+            console.log('Log Save Success');
+        }
+    };
+    const onError = (error) => {
+        console.log(error);
+    };
+    log.save()
+        .then(created)
+        .catch(onError);
     res.render('error');
 });
 
