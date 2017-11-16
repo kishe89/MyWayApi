@@ -4,14 +4,14 @@ let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
-
+let Log = require('./model/Log.js');
+let ErrorLog = require('./model/ErrorLog');
+let Logger = require('./util/logger');
 let index = require('./routes/index');
 let users = require('./routes/users');
 
 let app = express();
 let mongoose = require('mongoose');
-let Log = require('./model/Log.js');
-let Logger = require('./util/logger');
 let Initializer = require('./init/Initializer');
 Initializer.InitMongoDB(process.env,mongoose);
 
@@ -21,6 +21,25 @@ Initializer.InitMongoDB(process.env,mongoose);
 // http://expressjs.com/api#app-settings for more details.
 app.enable('trust proxy');
 
+app.use(function (req, res, next) {
+    let LogObject=Logger.reqgenerator(req);
+    let log = new Log({
+        userAgent: LogObject.userAgent,
+        ip: LogObject.ip,
+        originalUrl: LogObject.originalUrl,
+        protocol: LogObject.protocol,
+        date: LogObject.date,
+        method: LogObject.method,
+        ApplicationId: LogObject.ApplicationId
+    });
+    log.save(function (err, result) {
+        if(err) {
+            console.log(err);
+        }
+        console.log(result);
+    });
+    next();
+});
 // Add a handler to inspect the req.secure flag (see
 // http://expressjs.com/api#req.secure). This allows us
 // to know whether the request was via http or https.
@@ -37,29 +56,6 @@ app.use (function (req, res, next) {
     }
 });
 
-/**
- * reqeust log save
- */
-app.use(function (req, res, next) {
-
-    let LogObject=Logger(req);
-    let log = new Log({
-        userAgent: LogObject.userAgent,
-        ip: LogObject.ip,
-        originalUrl: LogObject.originalUrl,
-        protocol: LogObject.protocol,
-        date: LogObject.date,
-        method: LogObject.method,
-        ApplicationId: LogObject.ApplicationId
-    });
-    log.save(function (err, result) {
-        if(err){
-            console.log(err);
-        }
-        console.log(result);
-    });
-    next();
-});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -89,6 +85,24 @@ app.use(function(err, req, res, next) {
     res.locals.error = req.app.get('env') === 'development' ? err : {};
     // render the error page
     res.status(err.status || 500);
+    let LogObject=Logger.resgenerator(req,res);
+    let log = new ErrorLog({
+        userAgent: LogObject.userAgent,
+        ip: LogObject.ip,
+        originalUrl: LogObject.originalUrl,
+        protocol: LogObject.protocol,
+        date: LogObject.date,
+        method: LogObject.method,
+        ApplicationId: LogObject.ApplicationId,
+        resStatusCode:LogObject.resStatusCode,
+        resLocals:LogObject.resLocals
+    });
+    log.save(function (err, result) {
+        if(err) {
+            console.log(err);
+        }
+        console.log(result);
+    });
     res.render('error');
 });
 

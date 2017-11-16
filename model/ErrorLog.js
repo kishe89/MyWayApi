@@ -4,7 +4,7 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
-let LogSchema = new Schema({
+let ErrorLogSchema = new Schema({
     userAgent: String,
     ip: String,
     originalUrl: String,
@@ -16,4 +16,4 @@ let LogSchema = new Schema({
     resLocals:String
 });
 
-module.exports = mongoose.model('log', LogSchema);
+module.exports = mongoose.model('error_log', ErrorLogSchema);
