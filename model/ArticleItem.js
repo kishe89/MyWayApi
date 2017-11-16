@@ -1,10 +1,10 @@
 /**
  * http://usejsdoc.org/
  */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var ArticleItemSchema = new Schema({
+let ArticleItemSchema = new Schema({
     Title:String,
     Place:String,
     PlaceType:String,

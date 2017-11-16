@@ -1,10 +1,10 @@
 /**
  * http://usejsdoc.org/
  */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema({
+let ArticleSchema = new Schema({
     Kml_Uri:String,
     Contents:String,
     Like:{ type:Number, min: 0, default: 0},

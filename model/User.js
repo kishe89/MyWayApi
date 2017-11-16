@@ -1,10 +1,10 @@
 /**
  * http://usejsdoc.org/
  */
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+let UserSchema = new Schema({
     Nick: {type:String,unique:true},
     App:String,
     AppId:String,
