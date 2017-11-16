@@ -35,8 +35,13 @@ exports.InitMongoDB = function (env,mongoose) {
          * @TODO Production Environment Initialization
          */
         let service = JSON.parse(env.VCAP_SERVICES);
-        let mongodb = service['compose-for-mongodb'];
+        let mongodb = service['mLab-mongodb'];
         let connection_string = mongodb[0].credentials.uri;
+        /**
+         * compose mongodb option
+         * @type {{useMongoClient: boolean, connectTimeoutMS: number, keepAlive: boolean, ssl: boolean, sslValidate: boolean, sslCA: *, ha: boolean, reconnectTries: number}}
+         */
+        /*
         const options = {
             useMongoClient: true,
             connectTimeoutMS: 4000,
@@ -47,6 +52,27 @@ exports.InitMongoDB = function (env,mongoose) {
             ha: true,
             reconnectTries: 30
         }
+        */
+
+        //mLab mongodb option
+        const options = {
+            useMongoClient:true,
+            connectTimeoutMS: 4000,
+            keepAlive:true,
+            ha:true,
+            autoReconnect:true,
+            reconnectTries:30
+        };
+        let db = mongoose.connect(connection_string,options);
+        db.on('error',function (err) {
+            console.error(err);
+        });
+        db.on('connected',function () {
+            console.log('connection is connected');
+        });
+        db.on('disconnected',function (err) {
+            console.error(err);
+        });
 
     }
 };
