@@ -98,5 +98,35 @@ exports.InitStorage = function (env) {
         /**
          * @TODO Production Environment Initialization
          */
+        const objectstorage = service['Object-Storage'];
+        const auth_url = objectstorage[0].credentials.auth_url;
+        const tenantId = objectstorage[0].credentials.projectId;
+        const domainId = objectstorage[0].credentials.domainId;
+        const domainName = objectstorage[0].credentials.domainName;
+        const username = objectstorage[0].credentials.username;
+        const password = objectstorage[0].credentials.password;
+        const region = objectstorage[0].credentials.region;
+        let pkgcloud = require('pkgcloud');
+
+        const config = {
+            provider: 'openstack',
+            useServiceCatalog: true,
+            useInternal: false,
+            keystoneAuthVersion: 'v3',
+            authUrl: auth_url,
+            tenantId: tenantId,    //projectId from credentials
+            domainId: domainId,
+            domainName: domainName,
+            username: username,
+            password: password,
+            region: region   //dallas or london region
+        };
+        let storageClient = pkgcloud.storage.createClient(config);
+        storageClient.auth(function (err) {
+            if(err){
+                console.error(err);
+            }
+        });
+        return storageClient;
     }
 }
