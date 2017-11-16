@@ -79,3 +79,24 @@ exports.InitMongoDB = function (env,mongoose) {
 
     }
 };
+exports.InitStorage = function (env) {
+    if(!env.VCAP_SERVICES){
+        /**
+         * @TODO Local Initialization
+         * Please Input ./credentials/credential.js
+         */
+        let credentials = require('../credentials/credential');
+        let pkgcloud = require('pkgcloud');
+        let storageClient = pkgcloud.storage.createClient(credentials.ObjectStorage);
+        storageClient.auth(function (err) {
+            if(err){
+                console.error(err);
+            }
+        });
+        return storageClient;
+    }else{
+        /**
+         * @TODO Production Environment Initialization
+         */
+    }
+}
