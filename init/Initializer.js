@@ -98,6 +98,7 @@ exports.InitStorage = function (env) {
         /**
          * @TODO Production Environment Initialization
          */
+        const service = JSON.parse(env.VCAP_SERVICES);
         const objectstorage = service['Object-Storage'];
         const auth_url = objectstorage[0].credentials.auth_url;
         const tenantId = objectstorage[0].credentials.projectId;
