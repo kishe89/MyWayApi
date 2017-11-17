@@ -1,6 +1,11 @@
-module.exports = function(req, res, next) {
-    let User = require('../../../../model/User');
-    let bcrypt = require('bcrypt-nodejs');
+/**
+ * CreatedAt 2017-11-17 14:49:00 kst
+ * by kim ji woon
+ */
+
+module.exports = (req,res,next) =>{
+    const User = require('../../../../model/User');
+    const bcrypt = require('bcrypt-nodejs');
     const {Nick,App,AppId} = req.query;
     const AccessToken = req.headers['x-access-token'];
     const find = (user)=>{
@@ -24,7 +29,10 @@ module.exports = function(req, res, next) {
         next(error,req,res,next);
     };
 
-    User.findOne({Nick:Nick,App:App,AppId:AppId}).exec()
+    User.findOne({Nick:Nick,App:App,AppId:AppId})
+        .populate({path:'Friends',select:'_id Nick App'})
+        .populate({path:'Agree_Wait_Friends',select:'_id Nick App'})
+        .exec()
         .then(find)
         .catch(onError);
 };

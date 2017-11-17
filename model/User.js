@@ -4,7 +4,7 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let UserSchema = new Schema({
-    Nick: {type:String,unique:true},
+    Nick:String,
     App:String,
     AppId:String,
     AccessToken:String,
@@ -15,4 +15,5 @@ let UserSchema = new Schema({
     Upload_Article:[{ type: Schema.Types.ObjectId, ref: 'article'}],
     CreatedAt: { type:Date, defult: Date.now }
 });
+UserSchema.index({ App: 1, AppId: 1 }, { unique: true });
 module.exports = mongoose.model('user', UserSchema);
