@@ -6,14 +6,13 @@ module.exports = function(req, res, next) {
     let form = new multiparty.Form();
     let fieldMap = new Map();
     let Task = [];
-    let randompass = require('../util/random.js');
     form.on('field',function (name, value) {
         fieldMap.set(name,value);
     });
     form.on('part',function (part) {
         if (part.filename) {
             let filename = part.filename;
-            filename = 'post_'+Date.now()+filename;
+            filename = 'Profile_'+Date.now()+filename;
             fieldMap.set('Profile', filename);
         }else{
             part.resume();
@@ -29,36 +28,38 @@ module.exports = function(req, res, next) {
             return;
         }
         Promise.all(Task).then(function () {
-            const DecryptValue = randompass();
-            const strictValue = bcrypt.hashSync(DecryptValue, bcrypt.genSaltSync(8), null);
-            let user = new User({
-                Nick:fieldMap.get('Nick'),
-                App:fieldMap.get('App'),
-                AppId:fieldMap.get('AppId'),
-                Profile:fieldMap.get('Profile'),
-                AccessToken: strictValue,
-                DecryptValue:DecryptValue
-            });
-
-            user.save().then(function (result) {
-                if(!result){
-
-                    let error = new Error('User Save Fail');
-                    throw error;
+            const Nick = fieldMap.get('Nick');
+            const App = fieldMap.get('App');
+            const AppId = fieldMap.get('AppId');
+            const AccessToken = req.headers['x-access-token'];
+            const find = (user)=>{
+                if(user){
+                    bcrypt.compare(user.DecryptValue,AccessToken,function (err) {
+                        if(err){
+                            const error = new Error('AccessToken Invalid');
+                            error.status = 401;
+                            next(error,req,res,next);
+                        }else{
+                            user.DecryptValue = '';
+                            res.json(user);
+                        }
+                    });
                 }else{
-                    res.json(result);
+                    const error = new Error('User Not Found');
+                    error.status = 404;
+                    throw error;
                 }
-            }).catch(function (error) {
-                if(error.code==11000){
-                    error.message='Duplicate User';
-                    error.status = 409;
-                }
-                else{
-                    error.status = 500;
-                }
+            };
+            const onError = (error)=>{
                 next(error,req,res,next);
-            });
+            };
+            User.findOne({Nick:Nick,App:App,AppId:AppId})
+                .select({Nick:1,App:1,AppId:1,Profile:1,DecryptValue:1})
+                .exec()
+                .then(find)
+                .catch(onError);
         }).catch(function (err) {
+            console.error(err);
             let error = new Error('filesave error : '+err);
             error.status = 500;
             next(error,req,res,next);
