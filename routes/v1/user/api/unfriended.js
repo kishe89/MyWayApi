@@ -73,6 +73,7 @@ module.exports = (req, res, next) =>{
         next(error,req,res,next);
     };
 
+
     User.findOne({Nick:Nick,App:App,AppId:AppId})
         .populate({path:'Friends',select:'_id Nick App',match:{_id:_id}})
         .exec()

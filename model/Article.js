@@ -9,6 +9,7 @@ let ArticleSchema = new Schema({
     Contents:String,
     Like:{ type:Number, min: 0, default: 0},
     Like_Persons:{type: Schema.Types.ObjectId, ref: 'user'},
+    Images:[{type:String}],
     Publish_range:{type: Number, default:0},
     Article_List:[{ type: Schema.Types.ObjectId, ref: 'article_item'}],
     Comments:[{ type: Schema.Types.ObjectId, ref: 'comment'}],
@@ -17,5 +18,5 @@ let ArticleSchema = new Schema({
     UpdatedAt: { type:Date, defult: Date.now }
 
 });
-
+ArticleSchema.index({UpdatedAt:-1,CreatedAt:-1});
 module.exports = mongoose.model('article', ArticleSchema);

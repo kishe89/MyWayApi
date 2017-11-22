@@ -8,7 +8,6 @@ let ArticleItemSchema = new Schema({
     Title:String,
     Place:String,
     PlaceType:String,
-    Images:[{ type: Schema.Types.ObjectId, ref: 'image'}],
     Loc : {
         type: [Number],
         index:'2d'
