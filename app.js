@@ -7,7 +7,7 @@ let bodyParser = require('body-parser');
 let Log = require('./model/Log.js');
 let ErrorLog = require('./model/ErrorLog');
 let Logger = require('./util/logger');
-
+const cors = require('cors');
 let v1 = require('./routes/v1');
 let app = express();
 let mongoose = require('mongoose');
@@ -20,7 +20,7 @@ let storageClient = Initializer.InitStorage(process.env);
 // value can be used to determine the protocol. See
 // http://expressjs.com/api#app-settings for more details.
 app.enable('trust proxy');
-
+app.options('*', cors());
 app.use(function (req, res, next) {
     let LogObject=Logger.reqgenerator(req);
     let log = new Log({
