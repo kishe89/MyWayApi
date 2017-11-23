@@ -11,7 +11,7 @@ const upload = multer({
         }
     })
 });
-router.get('/',find);
-router.post('/',upload.fields([{name:'photos',maxCount:5},{name:'kml',maxCount:1}]),create_article);
+router.get('/',cors(),find);
+router.post('/',cors(),upload.fields([{name:'photos',maxCount:5},{name:'kml',maxCount:1}]),create_article);
 
 module.exports = router;

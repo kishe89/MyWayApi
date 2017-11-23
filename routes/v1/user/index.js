@@ -9,16 +9,16 @@ const create_friends = require('./api/create_friends');
 const friended = require('./api/friended');
 const unfriended = require('./api/unfriended');
 const upload_profile = require('./api/upload_profile');
-
+const cors = require('cors');
 /* GET home page. */
-router.get('/', find);
-router.post('/', create);
-router.get('/profile',profile);
-router.post('/profile',upload_profile);
+router.get('/',cors() ,find);
+router.post('/',cors() , create);
+router.get('/profile',cors() ,profile);
+router.post('/profile',cors() ,upload_profile);
 
-router.get('/my_friends',my_friends);
-router.get('/friends/:Nick/:App/:AppId',friends);
-router.post('/friends/:Nick/:App/:AppId',create_friends);
-router.put('/friends/:Nick/:App/:AppId',friended);
-router.delete('/friends/:Nick/:App/:AppId',unfriended);
+router.get('/my_friends',cors() ,my_friends);
+router.get('/friends/:Nick/:App/:AppId',cors() ,friends);
+router.post('/friends/:Nick/:App/:AppId',cors() ,create_friends);
+router.put('/friends/:Nick/:App/:AppId',cors() ,friended);
+router.delete('/friends/:Nick/:App/:AppId',cors() ,unfriended);
 module.exports = router;
