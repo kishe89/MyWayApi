@@ -4,6 +4,7 @@ const find = require('./api/find')
 const create_article = require('./api/create_article');
 const multer  = require('multer');
 const storageEngine = require('../../../util/ObjectStorageEngine');
+const cors = require('cors');
 const upload = multer({
     storage:storageEngine({
         destination:  (req, file, cb)=> {
