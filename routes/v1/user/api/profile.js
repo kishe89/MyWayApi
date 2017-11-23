@@ -15,11 +15,6 @@ module.exports = function(req, res, next) {
                         container:'profile',
                         remote:user.Profile
                     },function (err) {
-                        if(err){
-                            const error = new Error('Storage Error');
-                            error.status = err.status;
-                            next(error,req,res,next);
-                        }
                     }).pipe(res);
                 }
             });

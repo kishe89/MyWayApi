@@ -54,7 +54,7 @@ module.exports = function(req, res, next) {
                 next(error,req,res,next);
             };
             User.findOne({Nick:Nick,App:App,AppId:AppId})
-                .select({Nick:1,App:1,AppId:1,Profile:1,DecryptValue:1})
+                .select({Nick:1,App:1,AppId:1,Profile:1})
                 .exec()
                 .then(find)
                 .catch(onError);

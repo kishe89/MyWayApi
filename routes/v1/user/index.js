@@ -17,7 +17,7 @@ router.get('/profile',profile);
 router.post('/profile',upload_profile);
 
 router.get('/my_friends',my_friends);
-router.get('/friends',friends);
+router.get('/friends/:Nick/:App/:AppId',friends);
 router.post('/friends/:Nick/:App/:AppId',create_friends);
 router.put('/friends/:Nick/:App/:AppId',friended);
 router.delete('/friends/:Nick/:App/:AppId',unfriended);
