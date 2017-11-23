@@ -6,7 +6,8 @@
 module.exports = (req, res, next) =>{
     const User = require('../../../../model/User');
     const bcrypt = require('bcrypt-nodejs');
-    const {Nick,FriendNick,App,AppId,page_no} = req.query;
+    const {Nick,App,AppId} = req.params;
+    const {FriendNick,page_no} = req.query;
     const AccessToken = req.headers['x-access-token'];
     const page_start = page_no*1000;
     const page_end = 1000;

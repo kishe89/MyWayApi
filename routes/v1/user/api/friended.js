@@ -7,7 +7,8 @@ module.exports = (req,res,next) =>{
     const User = require('../../../../model/User');
     const bcrypt = require('bcrypt-nodejs');
     const {Nick,App,AppId} = req.params;
-    const {FriendNick,FriendApp,FriendAppId} = req.query;
+    // const {FriendNick,FriendApp,FriendAppId} = req.query;
+    const {_id} = req.query;
     const AccessToken = req.headers['x-access-token'];
     const find = (user)=>{
         if(user){
@@ -62,7 +63,7 @@ module.exports = (req,res,next) =>{
                                 throw error;
                         });
                     };
-                    User.findOne({Nick:FriendNick,App:FriendApp,AppId:FriendAppId})
+                    User.findOne({_id:_id})
                         .exec()
                         .then(findFriend)
                         .then(Friended)
