@@ -14,8 +14,8 @@ let ArticleSchema = new Schema({
     Article_List:[{ type: Schema.Types.ObjectId, ref: 'article_item'}],
     Comments:[{ type: Schema.Types.ObjectId, ref: 'comment'}],
     PostedBy:{ type: Schema.Types.ObjectId, ref: 'user'},
-    CreatedAt: { type:Date, defult: Date.now },
-    UpdatedAt: { type:Date, defult: Date.now }
+    CreatedAt: { type:Date, default: Date.now },
+    UpdatedAt: { type:Date, default: Date.now }
 
 });
 ArticleSchema.index({UpdatedAt:-1,CreatedAt:-1});
