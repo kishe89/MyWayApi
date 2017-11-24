@@ -13,7 +13,7 @@ let UserSchema = new Schema({
     Friends:[{ type: Schema.Types.ObjectId, ref: 'user'}],
     Agree_Wait_Friends:[{ type: Schema.Types.ObjectId, ref: 'user'}],
     Upload_Article:[{ type: Schema.Types.ObjectId, ref: 'article'}],
-    CreatedAt: { type:Date, defult: Date.now }
+    CreatedAt: { type:Date, default: Date.now }
 });
 UserSchema.index({ App: 1, AppId: 1 }, { unique: true });
 module.exports = mongoose.model('user', UserSchema);

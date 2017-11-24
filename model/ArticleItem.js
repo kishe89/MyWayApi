@@ -13,8 +13,8 @@ let ArticleItemSchema = new Schema({
         index:'2d'
     },
     PostedBy:{ type: Schema.Types.ObjectId, ref: 'user'},
-    CreatedAt: { type:Date, defult: Date.now },
-    UpdatedAt: { type:Date, defult: Date.now }
+    CreatedAt: { type:Date, default: Date.now },
+    UpdatedAt: { type:Date, default: Date.now }
 
 });
 

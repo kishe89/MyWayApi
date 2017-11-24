@@ -10,7 +10,6 @@ module.exports = (req,res,next)=>{
     const AsyncArticleItemSavePromise = require('../util/ArticleItemSavePromise');
 
     const photos = req.files['photos'];
-    console.log(photos);
     const kml = req.files['kml'];
     const AccessToken = req.headers['x-access-token'];
     const {articleItems,Nick,App,AppId,Contents,Publish_range} = req.body;
@@ -37,7 +36,7 @@ module.exports = (req,res,next)=>{
     };
     const createArticleItemSaveTask = (user)=>{
         let Task =[];
-        articleItems.forEach((index,item)=>{
+        articleItems.forEach((item)=>{
             Task.push(new AsyncArticleItemSavePromise(item,user));
         });
         let object = {
@@ -49,8 +48,7 @@ module.exports = (req,res,next)=>{
     const ArticleItemSaveTaskExcute = (object)=>{
         Promise.all(object.Task).then((article_items)=>{
             object.article_items = article_items;
-            console.log('22');
-            console.log(object);
+
             return new Promise((resolve,reject)=>{
                 let pathArray =[];
                 if(photos){

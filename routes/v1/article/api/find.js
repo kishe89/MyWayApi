@@ -7,6 +7,7 @@ module.exports = (req,res,next)=>{
     let User = require('../../../../model/User');
     const bcrypt = require('bcrypt-nodejs');
     const Article = require('../../../../model/Article');
+    const Article_Item = require('../../../../model/ArticleItem');
     const {Nick,App,AppId,page_no} = req.query;
     const page_start = page_no*1000;
     const page_end = 1000;
@@ -42,11 +43,17 @@ module.exports = (req,res,next)=>{
                                     /**
                                      * TODO PostedBy의 User Friends에 요청자 _id값 있는지 확인후 없으면 Filter
                                      */
+                                    if(!article.PostedBy.Friends.indexOf(user._id)){
+                                        articles[index].pop();
+                                    }
                                     return;
                                 case 2:
                                     /**
                                      * TODO PostedBy의 User _id가 내가 아니면 Filter
                                      */
+                                    if(!article.PostedBy._id !== user._id){
+                                        articles[index].pop();
+                                    }
                                     return;
                                 default:
                                     /**
@@ -62,10 +69,10 @@ module.exports = (req,res,next)=>{
                     };
                     Article.find({})
                         .sort({UpdatedAt:-1})
-                        .skip(page_start)
-                        .limit(page_end)
                         .populate({path:'Article_List'})
                         .populate({path:'PostedBy'})
+                        .skip(page_start)
+                        .limit(page_end)
                         .exec()
                         .then(FindArticles)
                         .then(FilterArticles)
