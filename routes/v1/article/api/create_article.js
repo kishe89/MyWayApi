@@ -8,7 +8,7 @@ module.exports = (req,res,next)=>{
     const bcrypt = require('bcrypt-nodejs');
     const Article = require('../../../../model/Article');
     const AsyncArticleItemSavePromise = require('../util/ArticleItemSavePromise');
-
+    console.log('come');
     const photos = req.files['photos'];
     const kml = req.files['kml'];
     const AccessToken = req.headers['x-access-token'];
@@ -51,13 +51,17 @@ module.exports = (req,res,next)=>{
 
             return new Promise((resolve,reject)=>{
                 let pathArray =[];
+                let kmlpath = '';
                 if(photos){
                     for(let index = 0; index<photos.length; index++){
                         pathArray.push(photos[index].path);
                     }
                 }
+                if(kml){
+                    kmlpath = kml.path;
+                }
                 const article = new Article({
-                    Kml_Uri:kml.path,
+                    Kml_Uri:kmlpath,
                     Contents:Contents,
                     Images:pathArray,
                     Publish_range:Publish_range,

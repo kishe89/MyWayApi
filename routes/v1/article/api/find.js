@@ -38,7 +38,7 @@ module.exports = (req,res,next)=>{
                                     /**
                                      * TODO Not Fiilter
                                      */
-                                    return;
+                                    break;
                                 case 1:
                                     /**
                                      * TODO PostedBy의 User Friends에 요청자 _id값 있는지 확인후 없으면 Filter
@@ -46,7 +46,7 @@ module.exports = (req,res,next)=>{
                                     if(!article.PostedBy.Friends.indexOf(user._id)){
                                         articles[index].pop();
                                     }
-                                    return;
+                                    break;
                                 case 2:
                                     /**
                                      * TODO PostedBy의 User _id가 내가 아니면 Filter
@@ -54,12 +54,12 @@ module.exports = (req,res,next)=>{
                                     if(!article.PostedBy._id !== user._id){
                                         articles[index].pop();
                                     }
-                                    return;
+                                    break;
                                 default:
                                     /**
                                      * TODO Not Fiilter
                                      */
-                                    return;
+                                    break;
                             }
                         });
                         res.json(articles);
