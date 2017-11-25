@@ -25,6 +25,7 @@ module.exports = (req,res,next)=>{
                         /**
                          * TODO article exist check
                          */
+                        console.log(user);
                         return articles;
                     };
                     const FilterArticles = (articles)=>{
@@ -32,41 +33,38 @@ module.exports = (req,res,next)=>{
                          * TODO public range & relationship check
                          * Publish_range 0 전체 공개, 1 친구 공개, 2 비공개
                          */
-                        articles.forEach((index,article)=>{
+                        articles.slice().reverse().forEach(function(article,index,current_array){
+                            console.log(index+':'+current_array.length);
                             switch (article.Publish_range){
                                 case 0:
-                                    /**
-                                     * TODO Not Fiilter
-                                     */
                                     break;
                                 case 1:
-                                    /**
-                                     * TODO PostedBy의 User Friends에 요청자 _id값 있는지 확인후 없으면 Filter
-                                     */
-                                    if(!article.PostedBy.Friends.indexOf(user._id)){
-                                        articles[index].pop();
+                                    if(!(article.PostedBy.Friends.indexOf(user._id)>-1)){
+                                        console.log('freinds');
+                                        console.log((article.PostedBy._id === user._id)+':'+index+':'+(current_array.length-1));
+                                        articles.splice(((current_array.length-1)-index),1);
                                     }
                                     break;
                                 case 2:
-                                    /**
-                                     * TODO PostedBy의 User _id가 내가 아니면 Filter
-                                     */
-                                    if(!article.PostedBy._id !== user._id){
-                                        articles[index].pop();
+                                    if(!(article.PostedBy._id === user._id)){
+                                        console.log('private');
+                                        console.log((article.PostedBy._id === user._id)+':'+index+':'+(current_array.length-1));
+                                        articles.splice(((current_array.length-1)-index),1);
                                     }
                                     break;
                                 default:
-                                    /**
-                                     * TODO Not Fiilter
-                                     */
                                     break;
+
                             }
                         });
+
+
                         res.json(articles);
-                    }
+                    };
                     const FindArticlesOnError = (error)=>{
                         next(error,req,res,next);
                     };
+
                     Article.find({})
                         .sort({UpdatedAt:-1})
                         .populate({path:'Article_List'})
