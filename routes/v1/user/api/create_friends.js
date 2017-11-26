@@ -34,11 +34,21 @@ module.exports = (req, res, next) =>{
                     };
                     const resultCheck = (result)=>{
                         if((result.result.nModified >=1) && (result.result.n >=1)){
+
                             User.findOne({_id:result.user._id},{AccessToken:0,DecryptValue:0})
                                 .populate({path:'Friends',select:'Nick App AppId',match:{_id:_id}})
                                 .exec()
                                 .then((updatedUser)=>{
-                                    res.json(updatedUser);
+                                    User.update({_id:_id},{$addToSet:{Friends:result.user._id}})
+                                        .exec()
+                                        .then(()=>{
+                                            res.json(updatedUser);
+                                        })
+                                        .catch((error)=>{
+                                            console.log(error);
+                                            error.status = 500;
+                                            throw error;
+                                        });
                                 })
                                 .catch((error)=>{
                                     console.log(error);
