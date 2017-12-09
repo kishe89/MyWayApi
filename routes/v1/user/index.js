@@ -14,7 +14,7 @@ const cors = require('cors');
 /* GET home page. */
 router.get('/',cors() ,find);
 router.post('/',cors() , create);
-router.post('/login',cors(), loggedin());
+router.post('/login',cors(), loggedin);
 router.get('/profile',cors() ,profile);
 router.post('/profile',cors() ,upload_profile);
 
