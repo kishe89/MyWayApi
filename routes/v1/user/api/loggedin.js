@@ -7,7 +7,9 @@
 module.exports = (req, res, next)=>{
     const User = require('../../../../model/User');
     const bcrypt = require('bcrypt-nodejs');
-    const {Nick,App,AppId} = req.body;
+    const Nick = req.body.Nick;
+    const App = req.body.App;
+    const AppId = req.body.AppId
 
     const find = (user)=>{
         return new Promise((resolve, reject)=>{
