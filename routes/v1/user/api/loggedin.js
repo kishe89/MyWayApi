@@ -23,6 +23,10 @@ module.exports = (req, res, next)=>{
         res.json(user);
     };
     const onError = (error)=>{
+        if(error.status != 500){
+            res.status(error.status).send(error);
+            return;
+        }
         next(error,req,res,next);
     }
     User.findOne({Nick:Nick,App:App,AppId:AppId})
