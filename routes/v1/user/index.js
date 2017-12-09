@@ -9,10 +9,12 @@ const create_friends = require('./api/create_friends');
 const friended = require('./api/friended');
 const unfriended = require('./api/unfriended');
 const upload_profile = require('./api/upload_profile');
+const loggedin = require('./api/loggedin');
 const cors = require('cors');
 /* GET home page. */
 router.get('/',cors() ,find);
 router.post('/',cors() , create);
+router.post('/login',cors(), loggedin());
 router.get('/profile',cors() ,profile);
 router.post('/profile',cors() ,upload_profile);
 
