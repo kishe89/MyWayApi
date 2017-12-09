@@ -6,22 +6,12 @@
  */
 module.exports = (req, res, next)=>{
     const User = require('../../../../model/User');
-    const bcrypt = require('bcrypt-nodejs');
     const {Nick,App,AppId} = req.body;
 
     const find = (user)=>{
         return new Promise((resolve, reject)=>{
             if(user){
-                bcrypt.compare(user.DecryptValue,AccessToken,function (err) {
-                    if(err){
-                        const error = new Error('AccessToken Invalid');
-                        error.status = 401;
-                        reject(error);
-                    }else{
-                        resolve(user);
-                    }
-
-                });
+                resolve(user);
             }else{
                 const error = new Error('User Not Found');
                 error.status = 404;
