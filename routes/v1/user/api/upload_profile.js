@@ -36,9 +36,6 @@ module.exports = function(req, res, next) {
                 if(user){
                     bcrypt.compare(user.DecryptValue,AccessToken,function (err) {
                         if(err){
-                            console.log(user.DecryptValue);
-                            console.log(AccessToken);
-                            console.log(err);
                             const error = new Error('AccessToken Invalid');
                             error.status = 401;
                             next(error,req,res,next);
@@ -57,7 +54,7 @@ module.exports = function(req, res, next) {
                 next(error,req,res,next);
             };
             User.findOne({Nick:Nick,App:App,AppId:AppId})
-                .select({Nick:1,App:1,AppId:1,Profile:1})
+                .select({Nick:1,App:1,AppId:1,Profile:1,DecryptValue:1})
                 .exec()
                 .then(find)
                 .catch(onError);
