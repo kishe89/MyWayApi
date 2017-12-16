@@ -36,6 +36,9 @@ module.exports = function(req, res, next) {
                 if(user){
                     bcrypt.compare(user.DecryptValue,AccessToken,function (err) {
                         if(err){
+                            console.log(user.DecryptValue);
+                            console.log(AccessToken);
+                            console.log(err);
                             const error = new Error('AccessToken Invalid');
                             error.status = 401;
                             next(error,req,res,next);
