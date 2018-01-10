@@ -8,7 +8,7 @@ let ArticleSchema = new Schema({
     Kml_Uri:String,
     Contents:String,
     Like:{ type:Number, min: 0, default: 0},
-    Like_Persons:{type: Schema.Types.ObjectId, ref: 'user'},
+    Like_Persons:[{type: Schema.Types.ObjectId, ref: 'user'}],
     Images:[{type:String}],
     Publish_range:{type: Number, default:0},
     Article_List:[{ type: Schema.Types.ObjectId, ref: 'article_item'}],
